@@ -3,7 +3,7 @@ int i,j,k;
 struct Catatan {
 	int masukLuar;
 	int tipe;
-	int nominal;
+	unsigned int nominal;
 	int hari;
 	int bulan;
 	int tahun;
@@ -12,6 +12,17 @@ struct Catatan {
 
 void ask(){
 	printf(">> ");
+}
+
+void printNominal(int nom){
+	int juta = nom/1000000;
+	int ribu = (nom%1000000)/1000;
+	int ratus = nom%1000;
+	char nominal[10];
+	if (nom>999999) sprintf(nominal,"Rp%d,%03d,%03d",juta,ribu,ratus);
+	else if (nom>999) sprintf(nominal,"Rp%d,%03d",ribu,ratus);
+	else sprintf(nominal,"%d",ratus);
+	printf("%13s\n",nominal);
 }
 
 int kodeTgl(int h,int b, int t){
@@ -32,7 +43,7 @@ char* bulanApa (int bulan){
 	   	case 10: return "Oktober";
 	   	case 11: return "November";
 	   	case 12: return "Desember";
-	   	default: return "Error Bulan";
+	   	default: return "? bulan";
 	   }
 }
 
@@ -46,7 +57,8 @@ char* tipeApa (int tipe){
 	   	case 5: return "Perlengkapan Kuliah";
 	   	case 6: return "Keperluan Pribadi";
 	   	case 7: return "Hiburan";
-	   	default: return "Lainnya";
+	   	case 8: return "Lainnya";
+	   	default: return "? tipe";
 	   }
 }
 
@@ -54,6 +66,6 @@ char* masukLuar (int masukLuar) {
 	   switch (masukLuar){
 	   	case 1: return "Pemasukan (+)";
 	   	case 2: return "Pengeluaran (-)";
-	   	default: return "Error masukLuar";
+	   	default: return "? masukLuar";
 	   }
 }

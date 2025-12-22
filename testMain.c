@@ -8,17 +8,17 @@
 #include "menu.c"
 
 int main () {
-	int n = 3;
-	struct Catatan c[100] = {};
+	int n = 7;
+	struct Catatan c[100] ={{0},
+						{1,0,999999999,1,1,9999,99990101},
+						{2,1,12000,11,9,1111,11110911},
+						{2,2,31000,31,1,1111,11110131}};
+	
+	sortTanggal(c,n);
 	
 //	updateCatatan(&c[0]);
-	menu(c,n);
+//	menu(c,n);
+	cekCatatan(c,n);
 	
-//	for(i=0;i<n;i++){
-//		printf("Index %d: %d %d %d\n",i, c[i].hari,c[i].bulan,c[i].tahun);
-//		printf("%s\n", bulanApa(c[i].bulan));
-//		printf("Kode: %d\n",c[i].kodeTanggal);
-//	}
-//	
 	return 0;
 }

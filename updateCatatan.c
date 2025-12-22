@@ -17,6 +17,10 @@ void updateTanggal(int *hh, int *bb, int *tttt, int *kode){
 	*kode = kodeTgl(*hh,*bb,*tttt);
 }
 
+void hapusCatatan(struct Catatan *c[], int n){
+	c[n] = 0;
+}
+
 void updateCatatan(struct Catatan *c){
 	do {
 		printf("1) Pemasukan, 2) Pengeluaran.\n");
@@ -32,8 +36,10 @@ void updateCatatan(struct Catatan *c){
 		} while (c->tipe<1 || c->tipe>8);
 	} else c->tipe = 0;
 	
-	printf("Nominal, tidak lebih dari jutaan\n");
-	scanf("%d",&c->nominal);
+	do {
+		printf("Nominal, tidak lebih dari jutaan.\n");
+		scanf("%d",&c->nominal);
+	} while (c->nominal<1 || c->nominal>999999999);
 	
 	printf("Tanggal\n");
 	updateTanggal(&c->hari,&c->bulan,&c->tahun,&c->kodeTanggal);

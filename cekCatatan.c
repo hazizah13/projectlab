@@ -8,8 +8,8 @@ int cekKosong(struct Catatan c[],int n){
 }
 
 void header(){
-	printf("%-20s %-20s %-20s %-15s\n","Kategori","Luar Masuk","Tanggal","Nominal");
-	printf("=============================================================================\n");
+	printf("%-20s %-20s %-20s %-10s\n","Kategori","Luar Masuk","Tanggal","Nominal");
+	printf("==============================================================================\n");
 }
 	
 void printCatatan(struct Catatan c){
@@ -17,21 +17,35 @@ void printCatatan(struct Catatan c){
 	printf("%-20s ", tipeApa(c.tipe));
 	printf("%-20s ", masukLuar(c.masukLuar));
 	printf("%-2d ", c.hari);
-	printf("%-+5s ", bulanApa(c.bulan));
-	printf("%-4d ", c.tahun);
-	printf("%15d\n", c.nominal);
+	printf("%-9s ", bulanApa(c.bulan));
+	printf("%-9d ", c.tahun);
+	printNominal(c.nominal);
 	   
 }
 
-void cekCatatan(struct Catatan c[],int n){
+void printSeluruhCatatan(struct Catatan c[], int size){
+	if (cekKosong(c,size)==0) {
+		printf("Belum Ada Catatan\n");
+		return;
+	}	
+	
+	header();
+	i=0;
+	while (c[i].kodeTanggal>0) {
+		printCatatan(c[i]);
+		i++;
+	}
+}
+
+void cekCatatan(struct Catatan c[],int size){
 	int opsi, filter;
 	int hmin,bmin,tmin,hmax,bmax,tmax, tglMin, tglMax;
 	int noMin, noMax;
-			
-	if (cekKosong(c,n)==0) {
+	
+	if (cekKosong(c,size)==0) {
 		printf("Belum Ada Catatan\n");
 		return;
-	}
+	}	
 	
 	sortTanggal(c,sizeof(*c)/sizeof(c[0]));
 	
@@ -45,8 +59,7 @@ void cekCatatan(struct Catatan c[],int n){
 	
 	switch (opsi){
 		case 1:
-			header();
-			for (i=0;i<n;i++) printCatatan(c[i]);
+			printSeluruhCatatan(c,size);
 			break;
 		case 2: 
 			printf("0) Pemasukan, 1) Kos/Sewa, 2) Transportasi,\n");
@@ -55,7 +68,11 @@ void cekCatatan(struct Catatan c[],int n){
 			scanf("%d",&filter);
 			
 			header();
-			for (i=0;i<n;i++) if (c[i].tipe==filter) printCatatan(c[i]);
+			i=0;
+			while (c[i].kodeTanggal>0) {
+				if (c[i].tipe==filter) printCatatan(c[i]);
+				i++;
+			}
 			
 			break;
 		case 3:
@@ -68,7 +85,11 @@ void cekCatatan(struct Catatan c[],int n){
 			tglMax = kodeTgl(hmax,bmax,tmax);
 			
 			header();
-			for (i=0;i<n;i++) if (c[i].kodeTanggal>tglMin&&c[i].kodeTanggal<tglMax) printCatatan(c[i]);
+			i=0;
+			while (c[i].kodeTanggal>0) {
+				if (c[i].kodeTanggal>tglMin&&c[i].kodeTanggal<tglMax) printCatatan(c[i]);
+				i++;
+			}
 			
 			break;
 		case 4: 
@@ -79,7 +100,7 @@ void cekCatatan(struct Catatan c[],int n){
 			scanf("%d",&noMax);
 			
 			header();
-			for (i=0;i<n;i++) if (c[i].nominal>noMin&&c[i].nominal<noMax) printCatatan(c[i]);
+			for (i=0;i<size;i++) if (c[i].nominal>noMin&&c[i].nominal<noMax) printCatatan(c[i]);
 			
 			break;
 		case 5:

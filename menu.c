@@ -1,7 +1,7 @@
 void menu(struct Catatan c[],int n){
 	int opsi;
 	
-	cekCatatan(c,n);
+	printSeluruhCatatan(c,n);
 	puts("");
 	
 	printf("1. Buka File Catatan\n");
