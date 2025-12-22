@@ -25,7 +25,8 @@ void printCatatan(struct Catatan c){
 
 void cekCatatan(struct Catatan c[],int n){
 	int opsi, filter;
-	int hmin,bmin,tmin,hmax,bmax,tmax, min, max;
+	int hmin,bmin,tmin,hmax,bmax,tmax, tglMin, tglMax;
+	int noMin, noMax;
 			
 	if (cekKosong(c,n)==0) {
 		printf("Belum Ada Catatan\n");
@@ -58,23 +59,31 @@ void cekCatatan(struct Catatan c[],int n){
 			
 			break;
 		case 3:
-			
 			printf("Minimal hh bb tttt ");
 			scanf("%d %d %d",&hmin,&bmin,&tmin);
-			min = kodeTgl(hmin,bmin,tmin);
+			tglMin = kodeTgl(hmin,bmin,tmin);
 			
 			printf("Maximal (hh bb tttt) ");
 			scanf("%d %d %d",&hmax,&bmax,&tmax);
-			max = kodeTgl(hmax,bmax,tmax);
+			tglMax = kodeTgl(hmax,bmax,tmax);
 			
 			header();
-			for (i=0;i<n;i++) if (c[i].kodeTanggal>min&&c[i].kodeTanggal<max) printCatatan(c[i]);
+			for (i=0;i<n;i++) if (c[i].kodeTanggal>tglMin&&c[i].kodeTanggal<tglMax) printCatatan(c[i]);
 			
 			break;
 		case 4: 
 			printf("Nominal minimal");
+			scanf("%d",&noMin);
+			
+			printf("Nominal maximal");
+			scanf("%d",&noMax);
+			
+			header();
+			for (i=0;i<n;i++) if (c[i].nominal>noMin&&c[i].nominal<noMax) printCatatan(c[i]);
+			
 			break;
 		case 5:
+			//arahin kembali ke menu
 			break;
 	}
 }
