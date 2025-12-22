@@ -8,12 +8,13 @@ int cekKosong(struct Catatan c[],int n){
 }
 
 void header(){
-	printf("%-20s %-20s %-20s %-10s\n","Kategori","Luar Masuk","Tanggal","Nominal");
-	printf("==============================================================================\n");
+	printf("%-3s %-20s %-20s %-20s %-10s\n","No.","Kategori","Luar Masuk","Tanggal","Nominal");
+	printf("==================================================================================\n");
 }
 	
-void printCatatan(struct Catatan c){
+void printCatatan(struct Catatan c, int index){
 	
+	printf("%-3d ", index+1);
 	printf("%-20s ", tipeApa(c.tipe));
 	printf("%-20s ", masukLuar(c.masukLuar));
 	printf("%-2d ", c.hari);
@@ -23,22 +24,8 @@ void printCatatan(struct Catatan c){
 	   
 }
 
-void printSeluruhCatatan(struct Catatan c[], int size){
-	if (cekKosong(c,size)==0) {
-		printf("Belum Ada Catatan\n");
-		return;
-	}	
-	
-	header();
-	i=0;
-	while (c[i].kodeTanggal>0) {
-		printCatatan(c[i]);
-		i++;
-	}
-}
-
-void cekCatatan(struct Catatan c[],int size){
-	int opsi, filter;
+void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
+	int filter;
 	int hmin,bmin,tmin,hmax,bmax,tmax, tglMin, tglMax;
 	int noMin, noMax;
 	
@@ -47,19 +34,14 @@ void cekCatatan(struct Catatan c[],int size){
 		return;
 	}	
 	
-	sortTanggal(c,sizeof(*c)/sizeof(c[0]));
-	
-	printf("1. Lihat seluruh transaksi\n");
-	printf("2. Filter sesuai kategori\n");
-	printf("3. Filter sesuai tanggal\n");
-	printf("4. Filter sesuai nominal\n");
-	printf("5. Kembali ke menu\n");
-	printf(">> ");
-	scanf("%d",&opsi);
-	
 	switch (opsi){
 		case 1:
-			printSeluruhCatatan(c,size);
+			header();
+			i=0;
+			while (c[i].kodeTanggal>0) {
+				printCatatan(c[i],i);
+				i++;
+			}
 			break;
 		case 2: 
 			printf("0) Pemasukan, 1) Kos/Sewa, 2) Transportasi,\n");
@@ -70,41 +52,67 @@ void cekCatatan(struct Catatan c[],int size){
 			header();
 			i=0;
 			while (c[i].kodeTanggal>0) {
-				if (c[i].tipe==filter) printCatatan(c[i]);
+				if (c[i].tipe==filter) printCatatan(c[i],i);
 				i++;
 			}
 			
 			break;
 		case 3:
-			printf("Minimal hh bb tttt ");
+			printf("Dari tanggal (hh bb tttt): ");
 			scanf("%d %d %d",&hmin,&bmin,&tmin);
 			tglMin = kodeTgl(hmin,bmin,tmin);
 			
-			printf("Maximal (hh bb tttt) ");
+			printf("Sampai tanggal (hh bb tttt): ");
 			scanf("%d %d %d",&hmax,&bmax,&tmax);
 			tglMax = kodeTgl(hmax,bmax,tmax);
 			
 			header();
 			i=0;
 			while (c[i].kodeTanggal>0) {
-				if (c[i].kodeTanggal>tglMin&&c[i].kodeTanggal<tglMax) printCatatan(c[i]);
+				if (c[i].kodeTanggal>=tglMin&&c[i].kodeTanggal<=tglMax) printCatatan(c[i],i);
 				i++;
 			}
 			
 			break;
 		case 4: 
-			printf("Nominal minimal");
+			printf("Nominal minimal: ");
 			scanf("%d",&noMin);
 			
-			printf("Nominal maximal");
+			printf("Nominal maximal: ");
 			scanf("%d",&noMax);
 			
 			header();
-			for (i=0;i<size;i++) if (c[i].nominal>noMin&&c[i].nominal<noMax) printCatatan(c[i]);
+			for (i=0;i<size;i++) if (c[i].nominal>=noMin&&c[i].nominal<=noMax) printCatatan(c[i],i);
 			
 			break;
-		case 5:
-			//arahin kembali ke menu
-			break;
+		case 5:	break;
 	}
+}
+
+void cekCatatan(struct Catatan c[],int size){
+	puts("CEK CATATAN\n");
+	
+	int opsi;
+	
+	if (cekKosong(c,size)==0) {
+		printf("Belum Ada Catatan\n");
+		return;
+	}	
+	
+	sortTanggal(c,sizeof(*c)/sizeof(c[0]));
+	
+	do{
+		printf("1. Lihat seluruh transaksi\n");
+		printf("2. Filter sesuai kategori\n");
+		printf("3. Filter sesuai tanggal\n");
+		printf("4. Filter sesuai nominal\n");
+		printf("5. Kembali ke menu\n");
+		do{
+			ask();
+			scanf("%d",&opsi);
+		} while (opsi<1||opsi>5);
+		
+		printSeluruhCatatan(c,size,opsi);
+	} while (opsi!=5);
+		
 }

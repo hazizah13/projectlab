@@ -11,7 +11,7 @@ struct Catatan {
 };
 
 void ask(){
-	printf(">> ");
+	printf("   >> ");
 }
 
 void printNominal(int nom){
