@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "structFormat.c"
 #include "sortTanggal.c"
-#include "updateCatatan.c"
 #include "cekCatatan.c"
+#include "updateCatatan.c"
 #include "fileHandling.c"
 #include "menu.c"
 
@@ -11,6 +11,7 @@ int main () {
 	int n = 3;
 	struct Catatan c[100] = {};
 	
+//	updateCatatan(&c[0]);
 	menu(c,n);
 	
 //	for(i=0;i<n;i++){
