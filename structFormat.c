@@ -10,6 +10,14 @@ struct Catatan {
 	int kodeTanggal;
 };
 
+void ask(){
+	printf(">> ");
+}
+
+int kodeTgl(int h,int b, int t){
+	return h+b*100+t*10000;
+}
+
 char* bulanApa (int bulan){
 	   switch (bulan) {
 	   	case 1: return "Januari";
