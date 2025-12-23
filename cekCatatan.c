@@ -1,10 +1,10 @@
-int cekKosong(struct Catatan c[],int n){
+int cariCatatan(struct Catatan c[],int n, int key){
     for (i = 0; i < n; i++) {
-        if (c[i].kodeTanggal == 0) {
+        if (c[i].kodeTanggal == key) {
             return i;
         }
     }
-    return 0;
+    return -1;
 }
 
 void header(){
@@ -29,7 +29,7 @@ void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
 	int hmin,bmin,tmin,hmax,bmax,tmax, tglMin, tglMax;
 	int noMin, noMax;
 	
-	if (cekKosong(c,size)==0) {
+	if (cariCatatan(c,size,0)==0) {
 		printf("Belum Ada Catatan\n");
 		return;
 	}	
@@ -47,8 +47,10 @@ void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
 			printf("0) Pemasukan, 1) Kos/Sewa, 2) Transportasi,\n");
 			printf("3) Makanan, 4) Tagihan Bulanan, 5) Perlengkapan Kuliah,\n");
 			printf("6) Keperluan Pribadi, 7) Hiburan, 8) Lainnya.\n");
+			ask();
 			scanf("%d",&filter);
 			
+			puts("");
 			header();
 			i=0;
 			while (c[i].kodeTanggal>0) {
@@ -66,6 +68,7 @@ void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
 			scanf("%d %d %d",&hmax,&bmax,&tmax);
 			tglMax = kodeTgl(hmax,bmax,tmax);
 			
+			puts("");
 			header();
 			i=0;
 			while (c[i].kodeTanggal>0) {
@@ -81,6 +84,7 @@ void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
 			printf("Nominal maximal: ");
 			scanf("%d",&noMax);
 			
+			puts("");
 			header();
 			for (i=0;i<size;i++) if (c[i].nominal>=noMin&&c[i].nominal<=noMax) printCatatan(c[i],i);
 			
@@ -90,18 +94,19 @@ void printSeluruhCatatan(struct Catatan c[], int size, int opsi){
 }
 
 void cekCatatan(struct Catatan c[],int size){
-	puts("CEK CATATAN\n");
+	puts("CEK CATATAN");
 	
 	int opsi;
 	
-	if (cekKosong(c,size)==0) {
+	if (cariCatatan(c,size,0)==0) {
 		printf("Belum Ada Catatan\n");
 		return;
 	}	
 	
-	sortTanggal(c,sizeof(*c)/sizeof(c[0]));
+	sortTanggal(c,size);
 	
 	do{
+		puts("");
 		printf("1. Lihat seluruh transaksi\n");
 		printf("2. Filter sesuai kategori\n");
 		printf("3. Filter sesuai tanggal\n");
@@ -111,7 +116,7 @@ void cekCatatan(struct Catatan c[],int size){
 			ask();
 			scanf("%d",&opsi);
 		} while (opsi<1||opsi>5);
-		
+		puts("");
 		printSeluruhCatatan(c,size,opsi);
 	} while (opsi!=5);
 		

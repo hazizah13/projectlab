@@ -25,6 +25,6 @@ void menu(struct Catatan c[],int size){
 			case 5: exit(0); break;
 		}
 		puts("");
-	} while (opsi!=4);
+	} while (opsi!=5);
 	
 }

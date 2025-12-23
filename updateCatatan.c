@@ -20,8 +20,14 @@ void updateTanggal(int *hh, int *bb, int *tttt, int *kode){
 	*kode = kodeTgl(*hh,*bb,*tttt);
 }
 
-void hapusCatatan(struct Catatan *c[], int n){
-	c[n] = 0;
+void hapusCatatan(struct Catatan *c){
+	c->masukLuar=0;
+	c->tipe=0;
+	c->nominal=0;
+	c->hari=0;
+	c->bulan=0;
+	c->tahun=0;
+	c->kodeTanggal=0;
 }
 
 void updateCatatan(struct Catatan *c){
@@ -52,19 +58,57 @@ void updateCatatan(struct Catatan *c){
 }
 
 void inginUpdate(struct Catatan c[], int size){
-	puts("PEMBARUAN CATATAN\n");
+	puts("PEMBARUAN CATATAN");
 	
-	i = cekKosong(c,size);
-	int lagi;
+	int opsi, yn;
 	do {
-		updateCatatan(&c[i]);
-		puts(""); printCatatan(c[i],i); puts("");
-		do {
-			printf("1) Edit Catatan Lama, 2) Buat Catatan Baru, 4) Kembali ke Menu.\n");
+		sortTanggal(c,size);
+		i = cariCatatan(c,size,0);
+		puts("");
+		
+		if (i==-1) {
+			puts("Catatan sudah penuh. 1) Edit suatu catatan, 2) Hapus suatu catatan, 3) Kembali ke menu.");
+			do {
+				ask();
+				scanf("%d",&opsi);
+			} while (opsi<1||opsi>3);
+			if (opsi==3) return;
+			
+			printf("Masukkan nomor catatan yang ingin %s.\n", (opsi==1) ? "diedit" : "dihapus");
 			ask();
-			scanf("%d",&lagi);
-		} while (lagi<1||lagi>4);
-		if (lagi==2) i++;
-		else if (lagi==4) i = -1;
+			scanf("%d",&i);
+			i--;
+			puts(""); printCatatan(c[i],i); puts("");
+			
+			printf("%s catatan ini? 1) Ya, 2) Tidak.\n", (opsi==1) ? "Edit" : "Hapus");
+			do{
+				ask();
+				scanf("%d",&yn);
+			} while (yn<1||yn>2);
+			
+			if (opsi==2&&yn==1) {
+				hapusCatatan(&c[i]);
+				sortTanggal(c,size);
+				printSeluruhCatatan(c,size,1);
+				puts("Catatan berhasil dihapus.");
+			} else if (opsi==1&&yn==1){
+				updateCatatan(&c[i]);
+				sortTanggal(c,size);
+				printCatatan(c[i],i);
+				puts("Catatan berhasil diedit."); 
+				printSeluruhCatatan(c,size,1);
+			}
+		} else {
+			do {
+				puts("1) Edit Catatan Lama, 2) Hapus catatan lama, 3) Buat Catatan Baru, 4) Kembali ke Menu.");
+				ask();
+				scanf("%d",&opsi);
+			} while (opsi<1||opsi>4);
+			if (opsi==2) i++;
+			else if (opsi==4) i = -1;
+			updateCatatan(&c[i]);
+			puts(""); printCatatan(c[i],i);
+		}
+		
 	} while (i>=0);
 }
