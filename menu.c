@@ -12,16 +12,17 @@ void menu(struct Catatan c[],int size){
 		printf("3. Perbarui Catatan\n");
 		printf("4. Simpan Catatan dalam File\n");
 		printf("5. Tutup Program\n");
-		ask();
-		
-		scanf("%d",&opsi);
+		do{
+			ask();
+			scanf("%d",&opsi);
+		} while (opsi<1||opsi>5);
 		puts("");
 		
 		switch(opsi){
-			case 1: bukaFile(); break;
+			case 1: bukaFile(c,size); break;
 			case 2: cekCatatan(c,size); break;
 			case 3: inginUpdate(c,size); break;
-			case 4: simpanFile(); break;
+			case 4: simpanFile(c,size); break;
 			case 5: exit(0); break;
 		}
 		puts("");

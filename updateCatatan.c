@@ -31,6 +31,7 @@ void hapusCatatan(struct Catatan *c){
 }
 
 void updateCatatan(struct Catatan *c){
+	puts("");
 	do {
 		printf("1) Pemasukan, 2) Pengeluaran.\n");
 		ask();
@@ -57,58 +58,81 @@ void updateCatatan(struct Catatan *c){
 	updateTanggal(&c->hari,&c->bulan,&c->tahun,&c->kodeTanggal);
 }
 
+void inginHapusEdit(struct Catatan c[],int size, int opsi){
+	int yn;
+	int n = cariCatatan(c,size,0);
+	puts(""); printSeluruhCatatan(c,size,1); puts("");
+	
+	if (n==0) {
+		printf("Belum ada catatan untuk di%s.\n", (opsi==1)?"edit":"hapus");
+		return;
+	}
+
+	printf("Masukkan nomor catatan yang ingin di%s.\n", (opsi==1) ? "edit" : "hapus");
+	do {
+		ask();
+		scanf("%d",&j);
+	} while (j<1||j>100);
+	
+	if (n<j&&n!=-1) {
+		printf("\nTidak ada catatan di nomor tersebut.\n");
+		return;
+	}
+	j--;
+	puts(""); printCatatan(c[j],j); puts("");
+	
+	printf("%s catatan ini? 1) Ya, 2) Tidak.\n", (opsi==1) ? "Edit" : "Hapus");
+	do{
+		ask();
+		scanf("%d",&yn);
+	} while (yn<1||yn>2);
+	
+	if (opsi==2&&yn==1) {
+		hapusCatatan(&c[j]);
+		sortTanggal(c,size);
+		puts("");
+		printSeluruhCatatan(c,size,1);
+		puts("\nCatatan berhasil dihapus.");
+	} else if (opsi==1&&yn==1){
+		updateCatatan(&c[j]);
+		sortTanggal(c,size);
+		printCatatan(c[j],j);
+		puts("\nCatatan berhasil diedit."); 
+		printSeluruhCatatan(c,size,1);
+	}
+}
+
 void inginUpdate(struct Catatan c[], int size){
-	puts("PEMBARUAN CATATAN");
+	puts("PERBARUAN CATATAN");
 	
 	int opsi, yn;
 	do {
-		sortTanggal(c,size);
 		i = cariCatatan(c,size,0);
 		puts("");
 		
 		if (i==-1) {
-			puts("Catatan sudah penuh. 1) Edit suatu catatan, 2) Hapus suatu catatan, 3) Kembali ke menu.");
+			puts("Catatan sudah penuh!\n1. Edit suatu catatan\n2. Hapus suatu catatan\n3. Kembali ke menu");
 			do {
 				ask();
 				scanf("%d",&opsi);
 			} while (opsi<1||opsi>3);
 			if (opsi==3) return;
 			
-			printf("Masukkan nomor catatan yang ingin %s.\n", (opsi==1) ? "diedit" : "dihapus");
-			ask();
-			scanf("%d",&i);
-			i--;
-			puts(""); printCatatan(c[i],i); puts("");
-			
-			printf("%s catatan ini? 1) Ya, 2) Tidak.\n", (opsi==1) ? "Edit" : "Hapus");
-			do{
-				ask();
-				scanf("%d",&yn);
-			} while (yn<1||yn>2);
-			
-			if (opsi==2&&yn==1) {
-				hapusCatatan(&c[i]);
-				sortTanggal(c,size);
-				printSeluruhCatatan(c,size,1);
-				puts("Catatan berhasil dihapus.");
-			} else if (opsi==1&&yn==1){
-				updateCatatan(&c[i]);
-				sortTanggal(c,size);
-				printCatatan(c[i],i);
-				puts("Catatan berhasil diedit."); 
-				printSeluruhCatatan(c,size,1);
-			}
+			inginHapusEdit(c,size,opsi);
 		} else {
+			puts("1. Edit Catatan Lama\n2. Hapus catatan lama\n3. Buat Catatan Baru\n4. Kembali ke Menu");
 			do {
-				puts("1) Edit Catatan Lama, 2) Hapus catatan lama, 3) Buat Catatan Baru, 4) Kembali ke Menu.");
 				ask();
 				scanf("%d",&opsi);
 			} while (opsi<1||opsi>4);
-			if (opsi==2) i++;
-			else if (opsi==4) i = -1;
-			updateCatatan(&c[i]);
-			puts(""); printCatatan(c[i],i);
+			if (opsi<3) inginHapusEdit(c,size,opsi);
+			else if (opsi==3) {
+				updateCatatan(&c[i]);
+				puts(""); printCatatan(c[i],i);
+				sortTanggal(c,size);
+				i++;
+			}
+			else i = -2;
 		}
-		
-	} while (i>=0);
+	} while (i>-2);
 }

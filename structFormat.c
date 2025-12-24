@@ -1,4 +1,4 @@
-int i,j,k;
+int i,j;
 
 struct Catatan {
 	int masukLuar;
@@ -12,17 +12,6 @@ struct Catatan {
 
 void ask(){
 	printf("   >> ");
-}
-
-void printNominal(int nom){
-	int juta = nom/1000000;
-	int ribu = (nom%1000000)/1000;
-	int ratus = nom%1000;
-	char nominal[10];
-	if (nom>999999) sprintf(nominal,"Rp%d,%03d,%03d",juta,ribu,ratus);
-	else if (nom>999) sprintf(nominal,"Rp%d,%03d",ribu,ratus);
-	else sprintf(nominal,"%d",ratus);
-	printf("%13s\n",nominal);
 }
 
 int kodeTgl(int h,int b, int t){
