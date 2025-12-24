@@ -1,1 +1,1 @@
-# projectlab
+# projectlab: catatan keuangan mahasiswa
